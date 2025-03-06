@@ -10,7 +10,7 @@ import { HousingLocation } from '../housinglocation';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  readonly baseUrl = 'https://angular.io/assets/images/tutorials/faa';
+  readonly baseUrl = 'https://angular.dev/assets/images/tutorials/common';
 
   housingLocation: HousingLocation = {
     id: 9999,
