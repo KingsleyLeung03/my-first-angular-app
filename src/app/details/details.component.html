@@ -1,11 +1,20 @@
 <!-- <p>details works!</p> -->
 <article>
-  <img
-    class="listing-photo"
-    [src]="housingLocation?.photo"
-    alt="Exterior photo of {{ housingLocation?.name }}"
-    crossorigin
-  />
+  @defer {
+    <img
+      class="listing-photo"
+      [src]="housingLocation?.photo"
+      alt="Exterior photo of {{ housingLocation?.name }}"
+      crossorigin
+    />
+  } @placeholder {
+    <p>Placeholder for house image</p>
+  } @loading {
+    <p>Loading...</p>
+  } @error {
+    <p>Error loading house image</p>
+  }
+  
   <section class="listing-description">
     <h2 class="listing-heading">{{ housingLocation?.name }}</h2>
     <p class="listing-location">{{ housingLocation?.city }}, {{ housingLocation?.state }}</p>
