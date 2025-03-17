@@ -1,4 +1,4 @@
-import { ComponentFixture, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, DeferBlockBehavior, fakeAsync, flush, TestBed, tick } from '@angular/core/testing';
 import { HousingLocationComponent } from './housing-location.component';
 import { HousingLocation } from '../housinglocation';
 import { provideRouter } from '@angular/router';
@@ -14,7 +14,8 @@ describe('HousingLocationComponent', () => {
       imports: [CommonModule, HousingLocationComponent],
       providers: [
         provideRouter(routes)
-      ]
+      ],
+      deferBlockBehavior: DeferBlockBehavior.Manual,
     })
     .compileComponents();
 
@@ -46,29 +47,34 @@ describe('HousingLocationComponent', () => {
     expect(compiled.querySelector('.listing-location')?.textContent).toContain('Test City, Test State');
   });
 
-  // it('should render the image', fakeAsync(() => {
-  //   const mockHousingLocation: HousingLocation = {
-  //     id: 1,
-  //     name: 'Test House',
-  //     city: 'Test City',
-  //     state: 'Test State',
-  //     photo: '../../assets/angular.svg',
-  //     availableUnits: 5,
-  //     wifi: true,
-  //     laundry: false
-  //   };
-  //   component.housingLocation = mockHousingLocation;
-  //   fixture.detectChanges();      
+  it('should render the image', fakeAsync(async() => {
+    const mockHousingLocation: HousingLocation = {
+      id: 1,
+      name: 'Test House',
+      city: 'Test City',
+      state: 'Test State',
+      photo: 'test.jpg',
+      availableUnits: 5,
+      wifi: true,
+      laundry: false
+    };
 
-  //   flush();
-  //   fixture.detectChanges();
+    component.housingLocation = mockHousingLocation;
+    // fixture.detectChanges();      
 
-  //   const compiled = fixture.nativeElement as HTMLElement;
-  //   const image = compiled.querySelector('img');
-  //   expect(image).toBeTruthy();
-  //   expect(image?.getAttribute('src')).toBe('test.jpg');
-  //   expect(image?.getAttribute('alt')).toBe('Exterior photo of Test House');
-  // }));
+    // flush();
+    // fixture.detectChanges();
+    // tick();
+
+    const deferBlock = (await fixture.getDeferBlocks())[0];
+    await deferBlock.render(2);
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const image = compiled.querySelector('img');
+    expect(image).toBeTruthy();
+    expect(image?.getAttribute('src')).toBe('test.jpg');
+    expect(image?.getAttribute('alt')).toBe('Exterior photo of Test House');
+  }));
   
   it('should have a link to details', () => {
     const mockHousingLocation: HousingLocation = {

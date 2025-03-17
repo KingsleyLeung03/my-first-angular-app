@@ -61,18 +61,22 @@ describe('DetailsComponent', () => {
     expect(component.housingLocation).toEqual(mockHousingLocation);
   }));
 
-  // it('should display housing location details', fakeAsync(() => {
-  //   tick();
-  //   fixture.detectChanges();
-  //   const compiled = fixture.nativeElement as HTMLElement;
-  //   expect(compiled.querySelector('.listing-heading')?.textContent).toContain('Test House');
-  //   expect(compiled.querySelector('.listing-location')?.textContent).toContain('Test City, Test State');
-  //   expect(compiled.querySelector('img')?.getAttribute('src')).toBe('test.jpg');
-  //   expect(compiled.querySelector('img')?.getAttribute('alt')).toBe('Exterior photo of Test House');
-  //   expect(compiled.querySelector('li:nth-child(1)')?.textContent).toContain('Units available: 5');
-  //   expect(compiled.querySelector('li:nth-child(2)')?.textContent).toContain('Does this location have wifi: true');
-  //   expect(compiled.querySelector('li:nth-child(3)')?.textContent).toContain('Does this location have laundry: false');
-  // }));
+  it('should display housing location details', fakeAsync(async() => {
+    tick();
+    fixture.detectChanges();
+
+    const deferBlock = (await fixture.getDeferBlocks())[0];
+    await deferBlock.render(2);
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.listing-heading')?.textContent).toContain('Test House');
+    expect(compiled.querySelector('.listing-location')?.textContent).toContain('Test City, Test State');
+    expect(compiled.querySelector('img')?.getAttribute('src')).toBe('test.jpg');
+    expect(compiled.querySelector('img')?.getAttribute('alt')).toBe('Exterior photo of Test House');
+    expect(compiled.querySelector('li:nth-child(1)')?.textContent).toContain('Units available: 5');
+    expect(compiled.querySelector('li:nth-child(2)')?.textContent).toContain('Does this location have wifi: true');
+    expect(compiled.querySelector('li:nth-child(3)')?.textContent).toContain('Does this location have laundry: false');
+  }));
 
   it('should call submitApplication on form submit', () => {
     const firstName = 'John';
